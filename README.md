@@ -15,9 +15,12 @@ CoinFlow is a lightweight, responsive web application built to provide real-time
 
 - JavaScript (ES6+): Core logic for API integration, event handling, and calculation.
 
-  ## How to Run
+## How to Run
 - Clone or download this repository to your local machine.
 
 - Open the index.html file in any modern web browser.
 
 - Select your "From" and "To" currencies, enter an amount, and click Convert Rate to see the live results.
+
+  <br/>
+### Check out my project here: [CoinFlow](https://surbhi-codes.github.io/CoinFlow/)
