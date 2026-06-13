@@ -1,48 +1,38 @@
+const baseURL =
+  "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/";
+
 const amountInput = document.getElementById("amount");
-const fromCurrency = document.getElementById("fromCurrency");
-const toCurrency = document.getElementById("toCurrency");
-const resultText = document.getElementById("resultText");
+const fromSelect = document.getElementById("fromCurrency");
+const toSelect = document.getElementById("toCurrency");
 const convertBtn = document.getElementById("convertBtn");
+const resultDiv = document.getElementById("resultText");
 
-const apiURL = "https://open.er-api.com/v6/latest/";
+convertBtn.addEventListener("click", function (e) {
+  e.preventDefault();
+  const amount = amountInput.value;
 
-async function getExchangeRate() {
-    let amountValue = amountInput.value;
-    
-    if (amountValue == "" || amountValue <= 0) {
-        amountValue = 1;
-        amountInput.value = 1;
-    }
+  const from = fromSelect.value.toLowerCase();
+  const to = toSelect.value.toLowerCase();
 
-    resultText.innerText = "Fetching live rates...";
+  if (amount === "" || amount <= 0) {
+    resultDiv.innerHTML = "Please enter a valid amount!";
+    return;
+  }
 
-    let fullLink = apiURL + fromCurrency.value;
+  resultDiv.innerHTML = "Loading...";
 
-    try {
-        let response = await fetch(fullLink);
-        let data = await response.json();
+  fetch(baseURL + from + ".json")
+    .then((res) => res.json())
+    .then((data) => {
+      const rate = data[from][to];
+      const final = amount * rate;
 
-
-        let rate = data.rates[toCurrency.value];
-        
-
-        let finalResult = (amountValue * rate).toFixed(2);
-
-
-        resultText.innerText = amountValue + " " + fromCurrency.value + " = " + finalResult + " " + toCurrency.value;
-        
-    } catch (error) {
-        resultText.innerText = "Something went wrong. Try again!";
-    }
-}
-
-
-convertBtn.addEventListener("click", function(e) {
-    e.preventDefault(); 
-    getExchangeRate();
-});
-
-
-window.addEventListener("load", function() {
-    getExchangeRate();
+      resultDiv.innerHTML = `${amount} ${from.toUpperCase()} = ${final.toFixed(
+        6
+      )} ${to.toUpperCase()}`;
+    })
+    .catch((err) => {
+      resultDiv.innerHTML = "Something went wrong!";
+      console.log(err);
+    });
 });
